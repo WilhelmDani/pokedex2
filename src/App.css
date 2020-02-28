@@ -1,4 +1,14 @@
 .App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 650px;
+  height: 400px;
+  padding-left: 10px;
+  margin: 50px auto;
+  background-color: #FE002f;
+  border-radius: 10px;
+  box-shadow: 0 14px rgba(0, 0, 0, 0.22), 0 18px 45px rgba(0, 0, 0, 0.22);
   text-align: center;
 }
 
@@ -35,4 +45,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.col-sm-4 {
+  text-align: end;
 }
