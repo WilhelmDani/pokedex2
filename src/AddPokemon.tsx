@@ -5,10 +5,10 @@ import { useForm, FieldError } from "react-hook-form";
 
 export const AddPokemon = () => {
     const [regions, setRegions] = useState<Regions[]>([]);
-    const [singleRegion, setSingleRegion] = useState<number>(0).sort();
+    const [singleRegion, setSingleRegion] = useState<number>(0);
     const [types, setTypes] = useState<Types[]>([]);
-    const [firstType, setFirstType] = useState<number>(0).sort(a, b);
-    const [secondType, setSecondType] = useState<number>(0).sort();
+    const [firstType, setFirstType] = useState<number>(0);
+    const [secondType, setSecondType] = useState<number>(0);
 
     const { register, handleSubmit } = useForm()
     const onSubmit = (data: any) => 
@@ -43,16 +43,32 @@ export const AddPokemon = () => {
     useEffect(() => {
         fetch('http://localhost:5000/api/regions/getall')
           .then(x => x.json())
-          .then(response => {
-              setRegions(response)
-            })
+          .then((response: Regions[]) => response.sort((a,b) => {
+                if (a.name < b.name) {
+                  return -1;
+                }
+                if (a.name > b.name) {
+                  return 1;
+                }
+                return 0;
+              })
+            )
+            .then(sorted => setRegions(sorted))
           .catch(error => console.log(error));
 
           fetch('http://localhost:5000/api/types/getall')
           .then(x => x.json())
-          .then(response => {
-              setTypes(response)
+          .then((response: Types[]) => response.sort((a,b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
           })
+        )
+        .then(sorted => setTypes(sorted))
           .catch(error => console.log(error));
       }, []);
     
