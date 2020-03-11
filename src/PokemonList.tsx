@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import {PokemonItem} from "./PokemonItem";
 import './PokemonList.css';
 
 export const PokemonList: FC = () => {
@@ -22,10 +23,8 @@ export const PokemonList: FC = () => {
 
     return (
         <div className="pokemon-list">
-            {Pokemon.map((p,index) => (
-            <div key={index}>
-                {p.name}
-            </div>
+            {Pokemon.map((p) => (
+                <PokemonItem pokemon={p} key={p.pokemonId}/>
             ))}
         </div>
     )

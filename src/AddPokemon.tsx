@@ -11,33 +11,53 @@ export const AddPokemon = () => {
     const [secondType, setSecondType] = useState<number>(0);
 
     const { register, handleSubmit } = useForm()
-    const onSubmit = (data: any) => 
-    {
-        let pokemonData = data as Pokemon
-        pokemonData.regionId = singleRegion
-        pokemonData.pokemonTypes = [
-            {typeId: firstType},
-            {typeId: secondType}
-        ] as PokemonTypes[]
 
-        console.log(pokemonData)
+    const submit = (data: Pokemon, sprite?: string) => {
+        let pokemonData: Pokemon = {
+            name: data.name,
+            number: data.number,
+            description: data.description,
+            regionId: singleRegion,
+            sprite,
+            pokemonTypes: [{typeId: firstType} as PokemonTypes]
+        }
+        if(secondType) 
+        {
+            pokemonData.pokemonTypes.push({typeId: secondType} as PokemonTypes)
+        }
 
-        const formData = new FormData
-        formData.append("Sprite", data.sprite[0])
+        const formData = new FormData();
         formData.append("Pokemon", JSON.stringify(pokemonData))
 
-        // fetch(
-        //     'http://localhost:5000/api/pokemon/add',
-        //     {
-        //         headers: {
-        //             "content-type": "application/x-www-form-urlencoded"
-        //         },
-        //         method: 'POST',
-        //         mode: 'no-cors',
-        //         body: formData
-        //     })
-        //     .then(response => response.json())
-        //     .catch(error => console.log(error))
+        fetch(
+            'http://localhost:5000/api/pokemon/add',
+            {
+                headers: {
+                    Accept: "application/json"
+                },
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            })
+            .then(response => response.json())
+            .catch(error => console.log(error))
+    } 
+
+    const onSubmit = (data: any) => 
+    {
+        if (data.sprite && data.sprite.length > 0)
+        {
+            console.log('here')
+            const reader = new FileReader();
+            reader.onload = () => {
+                const sprite = reader.result as string
+                submit(data, sprite);
+            }
+            reader.readAsDataURL(data.sprite[0])
+        }
+        else {
+            submit(data)
+        }
     }
 
     useEffect(() => {
@@ -86,10 +106,6 @@ export const AddPokemon = () => {
                 <label className="text-white">Index Number: </label>
                 <input type="text" ref={register} name="number"/> 
             </div>
-            {/* <div>
-                <label className="text-white">Type: </label>
-                <input type="text" ref={register} name="type"/>
-            </div> */}
             <div>
                 <label className="white-text">Description: </label>
                 <input type="text" ref={register} name="description"/>

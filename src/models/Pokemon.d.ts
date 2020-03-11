@@ -1,11 +1,12 @@
 interface Pokemon {
-    pokemonId: number,
+    pokemonId?: number,
     regionId: number,
     number: number,
     name: string,
     description: string,
-    region: Regions,
+    region?: Regions,
     pokemonTypes: PokemonTypes[],
+    sprite?: string
 }
 
 interface Regions {
